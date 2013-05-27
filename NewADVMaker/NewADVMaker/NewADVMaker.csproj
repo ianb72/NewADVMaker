@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1652E842-E7A3-4517-8426-35A273477095}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NewADVMaker</RootNamespace>
+    <AssemblyName>NewADVMaker</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BodyParts\ass.cs" />
+    <Compile Include="BodyParts\cock.cs" />
+    <Compile Include="BodyParts\pussy.cs" />
+    <Compile Include="BodyParts\nipples.cs" />
+    <Compile Include="BodyParts\tits.cs" />
+    <Compile Include="Character.cs" />
+    <Compile Include="CharacterGenerator.cs" />
+    <Compile Include="Characteristics.cs" />
+    <Compile Include="Characters\mari.cs" />
+    <Compile Include="Characters\player.cs" />
+    <Compile Include="Characters\stacey.cs" />
+    <Compile Include="Clothing\Blouse.cs" />
+    <Compile Include="Clothing\Bra.cs" />
+    <Compile Include="Clothing\ClothingBase.cs" />
+    <Compile Include="Clothing\Jeans.cs" />
+    <Compile Include="Clothing\MiniSkirt.cs" />
+    <Compile Include="Clothing\Panties.cs" />
+    <Compile Include="Commands\AdultCommandList.cs" />
+    <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\CommandParameters.cs" />
+    <Compile Include="Commands\Fuck.cs" />
+    <Compile Include="Commands\Kiss.cs" />
+    <Compile Include="Commands\Lick.cs" />
+    <Compile Include="Commands\LookAt.cs" />
+    <Compile Include="Commands\Quicky.cs" />
+    <Compile Include="Commands\Rub.cs" />
+    <Compile Include="Commands\StandardCommandList.cs" />
+    <Compile Include="Commands\Suck.cs" />
+    <Compile Include="Commands\Wank.cs" />
+    <Compile Include="Container.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="MainGameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainGameForm.Designer.cs">
+      <DependentUpon>MainGameForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRequestor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRequestor.Designer.cs">
+      <DependentUpon>frmRequestor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameObject.cs" />
+    <Compile Include="Interfaces\IcommandList.cs" />
+    <Compile Include="msgObjects.cs" />
+    <Compile Include="msgParams.cs" />
+    <Compile Include="Objects\Bed.cs" />
+    <Compile Include="Objects\Dildo.cs" />
+    <Compile Include="Objects\Strapon.cs" />
+    <Compile Include="Outfits\girlsSchoolUniform.cs" />
+    <Compile Include="Outfits\OutfitBase.cs" />
+    <Compile Include="Outfits\SexyCasual.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rooms\LivingRoom.cs" />
+    <Compile Include="Rooms\Kitchen.cs" />
+    <Compile Include="Rooms\MasterBedroom.cs" />
+    <Compile Include="Rooms\RoomBase.cs" />
+    <Compile Include="WordReplacement.cs" />
+    <EmbeddedResource Include="MainGameForm.resx">
+      <DependentUpon>MainGameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRequestor.resx">
+      <DependentUpon>frmRequestor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
