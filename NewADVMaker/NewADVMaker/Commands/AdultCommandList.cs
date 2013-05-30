@@ -10,21 +10,41 @@ namespace NewADVMaker.Commands
     {
         public MainGameForm.MessageHandler messageHandler { get; set; }
 
-
         public AdultCommandList()
         {
         }
+        public void msg(CommandParameters commandParameters, msgParams messageParams)
+        {
+            messageParams.commandParameters = commandParameters;
+            messageHandler.Invoke(messageParams);
+        }
         public void quicky(CommandParameters commandParameters)
         {
-            Character firstChar = (Character)commandParameters.firstObject;
-            Character secondChar = (Character)commandParameters.secondObject;
-
-            msg(new msgParams("Test fuck"));
+            Console.WriteLine("Quicky");
+        }
+        public void assfuck(CommandParameters commandParameters)
+        {
+        }
+        public void lick(CommandParameters commandParameters)
+        {
+         
+        }
+       
+        public void fuck(CommandParameters commandParameters)
+        {
 
         }
-        public void msg(msgParams messageParams)
+        public void suck(CommandParameters commandParameters)
         {
-            messageHandler.Invoke(messageParams);
+          
+        }
+        public void threesome(CommandParameters commandParamters)
+        {
+           
+        }
+        public void squeeze(CommandParameters commandParameters)
+        {
+          
         }
     }
 }

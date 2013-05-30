@@ -9,6 +9,6 @@ namespace NewADVMaker.Interfaces
     public interface IcommandList
     {
         MainGameForm.MessageHandler messageHandler { get; set; }
-        void msg(msgParams messageParams);
+        void msg(Commands.CommandParameters commandParameters, msgParams messageParams);
     }
 }

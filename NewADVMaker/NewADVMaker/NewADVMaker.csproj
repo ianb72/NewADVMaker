@@ -51,7 +51,7 @@
     <Compile Include="BodyParts\pussy.cs" />
     <Compile Include="BodyParts\nipples.cs" />
     <Compile Include="BodyParts\tits.cs" />
-    <Compile Include="Character.cs" />
+    <Compile Include="Characters\Character.cs" />
     <Compile Include="CharacterGenerator.cs" />
     <Compile Include="Characteristics.cs" />
     <Compile Include="Characters\mari.cs" />
@@ -63,20 +63,15 @@
     <Compile Include="Clothing\Jeans.cs" />
     <Compile Include="Clothing\MiniSkirt.cs" />
     <Compile Include="Clothing\Panties.cs" />
+    <Compile Include="CommandSearchParams.cs" />
     <Compile Include="Commands\AdultCommandList.cs" />
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\CommandParameters.cs" />
-    <Compile Include="Commands\Fuck.cs" />
-    <Compile Include="Commands\Kiss.cs" />
-    <Compile Include="Commands\Lick.cs" />
-    <Compile Include="Commands\LookAt.cs" />
-    <Compile Include="Commands\Quicky.cs" />
-    <Compile Include="Commands\Rub.cs" />
     <Compile Include="Commands\StandardCommandList.cs" />
-    <Compile Include="Commands\Suck.cs" />
-    <Compile Include="Commands\Wank.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Games\GameBase.cs" />
+    <Compile Include="Games\TestGame.cs" />
     <Compile Include="MainGameForm.cs">
       <SubType>Form</SubType>
     </Compile>

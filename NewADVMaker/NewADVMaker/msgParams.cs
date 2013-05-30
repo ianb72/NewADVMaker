@@ -11,11 +11,7 @@ namespace NewADVMaker
         public bool Bold { get; set; }
         public bool Italic { get; set; }
         public System.Drawing.Color TextColour { get; set; }
-        public Character Char1 { get; set; }
-        public Character Char2 { get; set; }
-        public Character Char3 { get; set; }
-        public GameObject Object1 { get; set; }
-        public GameObject Object2 { get; set; }
+        public Commands.CommandParameters commandParameters { get; set; }
 
         public msgParams(string messageText, bool bold, bool italic, System.Drawing.Color colour)
         {
