@@ -46,12 +46,13 @@ namespace NewADVMaker
         CommandHandler activeCommandHandler;
 
         RoomBase currentRoom = new RoomBase();
-        Games.GameBase currentGame = new Games.TestGame();
+        private Games.GameBase currentGame;
 
         #endregion
         #region Constructors
-        public MainGameForm()
+        public MainGameForm(Games.GameBase currentGame)
         {
+            this.currentGame = currentGame;
             InitializeComponent();
             Init();
         }

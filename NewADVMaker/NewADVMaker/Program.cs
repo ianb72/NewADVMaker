@@ -15,7 +15,7 @@ namespace NewADVMaker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainGameForm());
+            Application.Run(new MainGameForm(new Games.TestGame()));
         }
     }
 }
