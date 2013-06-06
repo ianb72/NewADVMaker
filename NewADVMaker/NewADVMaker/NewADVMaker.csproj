@@ -67,7 +67,7 @@
     <Compile Include="Clothing\Jeans.cs" />
     <Compile Include="Clothing\MiniSkirt.cs" />
     <Compile Include="Clothing\Panties.cs" />
-    <Compile Include="CommandSearchParams.cs" />
+    <Compile Include="Commands\CommandSearchParams.cs" />
     <Compile Include="Commands\AdultCommandList.cs" />
     <Compile Include="Commands\BabysittingCommandList.cs" />
     <Compile Include="Commands\CommandBase.cs" />
@@ -91,7 +91,7 @@
     <Compile Include="frmRequestor.Designer.cs">
       <DependentUpon>frmRequestor.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameObject.cs" />
+    <Compile Include="Objects\GameObject.cs" />
     <Compile Include="Interfaces\IcommandList.cs" />
     <Compile Include="MessageList.cs" />
     <Compile Include="msgObjects.cs" />

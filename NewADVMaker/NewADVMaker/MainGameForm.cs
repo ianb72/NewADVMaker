@@ -46,13 +46,21 @@ namespace NewADVMaker
         CommandHandler activeCommandHandler;
 
         RoomBase currentRoom = new RoomBase();
+<<<<<<< HEAD
         Games.GameBase currentGame;
+=======
+        private Games.GameBase currentGame;
+>>>>>>> 3638135981011096a00ccca5001072408c03bec4
 
         #endregion
         #region Constructors
-        public MainGameForm()
+        public MainGameForm(Games.GameBase currentGame)
         {
+<<<<<<< HEAD
            
+=======
+            this.currentGame = currentGame;
+>>>>>>> 3638135981011096a00ccca5001072408c03bec4
             InitializeComponent();
             Init();
         }
