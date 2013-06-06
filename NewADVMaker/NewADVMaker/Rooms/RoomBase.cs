@@ -9,13 +9,18 @@ namespace NewADVMaker.Rooms
     {
         public Dictionary<string,GameObject> contents { get; set; }
         public List<Character> peoplePresent { get; set; }
-        public Dictionary<string, RoomBase> exits { get; set; }
+        public Dictionary<RoomExit, RoomBase> exits { get; set; }
 
         public RoomBase()
+            :this(null)
         {
-            this.contents = new Dictionary<string,GameObject>();
+        }
+        public RoomBase(string objectName)
+        {
+            this.ObjectName = objectName;
+            this.contents = new Dictionary<string, GameObject>();
             this.peoplePresent = new List<Character>();
-            this.exits = new Dictionary<string, RoomBase>();
+            this.exits = new Dictionary<RoomExit, RoomBase>();
         }
     }
 }

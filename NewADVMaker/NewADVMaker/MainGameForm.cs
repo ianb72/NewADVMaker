@@ -22,8 +22,8 @@ namespace NewADVMaker
         #region Delegates and Events
         delegate void CommandHandler(string commandString);
         public delegate void MessageHandler(msgParams messageParams);
-        delegate void TurnCountChangedEventHandler();
-        event TurnCountChangedEventHandler TurnChangedEvent;
+        public delegate void TurnCountChangedEventHandler(TurnChangedEventArgs e);
+        public event TurnCountChangedEventHandler TurnChangedEvent;
         #endregion
         #region Declarations and Variables
         WordReplacement wordReplacement = new WordReplacement();
@@ -46,12 +46,13 @@ namespace NewADVMaker
         CommandHandler activeCommandHandler;
 
         RoomBase currentRoom = new RoomBase();
-        Games.GameBase currentGame = new Games.TestGame();
+        Games.GameBase currentGame;
 
         #endregion
         #region Constructors
         public MainGameForm()
         {
+           
             InitializeComponent();
             Init();
         }
@@ -59,17 +60,23 @@ namespace NewADVMaker
         #region Private Methods
         private void Init()
         {
+            Application.DoEvents();
+
+            currentGame = new Games.TestGame(new MessageHandler(msg),this);
+
             gameObjects = currentGame.gameObjects;
             player = currentGame.player;
 
             activeCommandHandler = new CommandHandler(ProcessCommand);
-            TurnChangedEvent += MainGameForm_TurnChangedEvent;
+
+            this.TurnChangedEvent +=MainGameForm_TurnChangedEvent;
+
+            msg("\n" + currentGame.GameTitle);
             DisplayPrompt();
         }
-        void MainGameForm_TurnChangedEvent()
+        void MainGameForm_TurnChangedEvent(TurnChangedEventArgs e)
         {
-            turnCount++;
-            lblTurnCounter.Text = Convert.ToString(turnCount);
+            lblTurnCounter.Text = turnCount.ToString();
         }
         private void msg(string message)
         {
@@ -79,6 +86,7 @@ namespace NewADVMaker
         {
             int stringIndex = 0;
             StringBuilder outputString = new StringBuilder();
+            StringBuilder currentCommand = new StringBuilder();
 
             while (stringIndex < message.Length)
             {
@@ -89,7 +97,7 @@ namespace NewADVMaker
                     #region Get Properties Command
                     try
                     {
-                        StringBuilder currentCommand = new StringBuilder();
+                        currentCommand = new StringBuilder();
                         while (readChar != "]" && stringIndex < message.Length)
                         {
                             readChar = message.Substring(stringIndex, 1);
@@ -100,9 +108,12 @@ namespace NewADVMaker
                         outputString.Append(ParseStringCommand(currentCommand.ToString()));
                         stringIndex--;
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         outputString.Append("*");
+                        Console.WriteLine(ex.Message);
+                        Console.WriteLine("Unable to parse command : {0}", currentCommand);
+
                     }
                     #endregion
                 }
@@ -110,7 +121,7 @@ namespace NewADVMaker
                 {
                     try
                     {
-                        StringBuilder currentCommand = new StringBuilder();
+                        currentCommand = new StringBuilder();
                         while (readChar != ">" && stringIndex < message.Length)
                         {
                             readChar = message.Substring(stringIndex, 1);
@@ -234,8 +245,10 @@ namespace NewADVMaker
                 if (referencedObject == null) { throw new Exception("Error"); }
                 toReturn = referencedObject.GetType().GetProperty(propertyName).GetValue(referencedObject, null).ToString();
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine("Error finding {0} in gameObject", objectName);
                 return "Error";
             }
 
@@ -262,7 +275,7 @@ namespace NewADVMaker
         {
             currentRoom = currentGame.currentRoom;
             msg("\n\n");
-            msg("[currentroom.ObjectName.uf]",true,false,Color.Navy);
+            msg("[currentRoom.ObjectName.uf]",true,false,Color.Navy);
             msg("\n");
             msg(_promptText, true, false, Color.Blue);
             msg("\n");
@@ -273,9 +286,8 @@ namespace NewADVMaker
         }
         private void ProcessCommand(string commandString)
         {
-            GameObject firstObject = null;
-            GameObject secondObject = null;
-            GameObject thirdObject = null;
+            GameObject[] commandObjects = new GameObject[16];
+
             CommandParameters commandParameters = new CommandParameters();
 
             try
@@ -296,42 +308,82 @@ namespace NewADVMaker
                     return;
                 }
 
-
                 string verb = commandSearchParams.commandVerb;
 
                 switch (commandSearchParams.verbPosition)
                 {
                     case 0:
-                        firstObject = player;
-
-                        if (commandParts.Length == 2)
+                        commandObjects[0] = currentGame.player;
+                        switch (commandParts.Length)
                         {
-                            secondObject = currentGame.findObject(secondObject, commandParts[1],(Character)player);
-                        }
-                        if (commandParts.Length == 3)
-                        {
-                            secondObject = currentGame.findObject(secondObject, commandParts[1]);
-                            thirdObject = currentGame.findObject(thirdObject, commandParts[2], (Character)firstObject, (Character)secondObject);
+                            case 1:
+                                break;
+                            case 2:
+                                commandObjects[1] = currentGame.findObject(commandObjects[1], commandParts[1], (Character)player);
+                                break;
+                            case 3:
+                                commandObjects[1] = currentGame.findObject(commandObjects[1], commandParts[1], (Character)player);
+                                commandObjects[2] = currentGame.findObject(commandObjects[2], commandParts[2], (Character)commandObjects[0], commandObjects[1]);
+                                break;
+                            case 4:
+                                commandObjects[1] = currentGame.findObject(commandObjects[1], commandParts[1]);
+                                commandObjects[2] = currentGame.findObject(commandObjects[2], commandParts[2], (Character)commandObjects[2], commandObjects[1]);
+                                commandObjects[3] = currentGame.findObject(commandObjects[3], commandParts[3], (Character)commandObjects[1], commandObjects[2]);
+                                break;
                         }
                         break;
                     case 1:
-                        if (commandParts.Length == 3)
+                        switch (commandParts.Length)
                         {
-                            firstObject = currentGame.findObject(firstObject, commandParts[0]);
-                            secondObject = currentGame.findObject(secondObject, commandParts[2], (Character)firstObject);
-                        }
-                        if (commandParts.Length == 4)
-                        {
-                            firstObject = currentGame.findObject(firstObject, commandParts[0]);
-                            secondObject = currentGame.findObject(secondObject, commandParts[2]);
-                            thirdObject = currentGame.findObject(thirdObject, commandParts[3], (Character)firstObject,(Character)secondObject);
+                            case 3:
+                                commandObjects[0] = currentGame.findObject(commandObjects[0], commandParts[0]);
+                                commandObjects[1] = currentGame.findObject(commandObjects[1], commandParts[2], (Character)commandObjects[0]);
+                                break;
+                            case 4:
+                                commandObjects[0] = currentGame.findObject(commandObjects[0], commandParts[0]);
+                                commandObjects[1] = currentGame.findObject(commandObjects[1], commandParts[2]);
+                                commandObjects[2] = currentGame.findObject(commandObjects[2], commandParts[3], (Character)commandObjects[0], commandObjects[1]);
+                                break;
+                            case 5:
+                                commandObjects[0] = currentGame.findObject(commandObjects[0], commandParts[0]);
+                                commandObjects[1] = currentGame.findObject(commandObjects[1], commandParts[2]);
+                                commandObjects[2] = currentGame.findObject(commandObjects[2], commandParts[3], (Character)commandObjects[0], commandObjects[1]);
+                                commandObjects[3] = currentGame.findObject(commandObjects[3], commandParts[4], (Character)commandObjects[0], commandObjects[2]);
+                                break;
+                            default:
+                                break;
                         }
                         break;
                 }
 
-                commandParameters = new CommandParameters(firstObject, secondObject, thirdObject);
+                commandParameters = new CommandParameters(commandObjects);
+
+                bool noObjects = true;
+                for (var objectIndex = 1; objectIndex < commandObjects.Length; objectIndex++)
+                {
+                    if (commandObjects[objectIndex] != null) { noObjects = false; break; }
+                }
+
+                bool missingObject = commandObjects[commandObjects.Length - 1] == null;
+
+                if (noObjects || missingObject)
+                {
+                    StringBuilder sb = new StringBuilder();
+
+                    for (var stringIndex = 1; stringIndex < commandParts.Length; stringIndex++)
+                    {
+                        sb.Append(commandParts[stringIndex]);
+                        sb.Append(" ");
+                    }
+
+                    commandParameters.stringParam = sb.ToString();
+                }
+                
                 commandParameters.objectContainingCommand = commandSearchParams.commandList;
                 commandParameters.mainGameObject = this;
+                commandParameters.gameObjects = currentGame.gameObjects;
+                commandParameters.currentRoom = currentGame.currentRoom;
+                commandParameters.currentGame = currentGame;
                 ExecuteCommand(verb, commandParameters);
             }
             catch (Exception ex)
@@ -343,10 +395,20 @@ namespace NewADVMaker
         }
         private void ExecuteCommand(string verb, CommandParameters commandParameters)
         {
-            Console.WriteLine("Executing command " + verb);
-            if(commandParameters.firstObject!=null) {Console.Write(commandParameters.firstObject.ObjectName + " ");}
-            if (commandParameters.secondObject != null) { Console.Write(commandParameters.secondObject.ObjectName + " "); }
-            if (commandParameters.thirdObject != null) { Console.Write(commandParameters.thirdObject.ObjectName + " "); }
+            Console.Write("Executing command " + verb + " ");
+            foreach (GameObject gameObj in commandParameters.commandObjects)
+            {
+                if (gameObj != null)
+                {
+                    Console.Write(gameObj.ObjectName + " [" + gameObj.GetType()+ "] ");
+                }
+            }
+
+            if (commandParameters.stringParam !=null &&  commandParameters.stringParam.Length>1)
+            {
+                Console.Write('"' + commandParameters.stringParam + '"' +" (string)");
+            }
+
             Console.WriteLine();
 
             object objectContainingMethod = commandParameters.objectContainingCommand;
@@ -358,7 +420,8 @@ namespace NewADVMaker
             if (mi != null)
             {
                 mi.Invoke(objectContainingMethod, parameters);
-                TurnChangedEvent();
+                turnCount++;
+                TurnChangedEvent(new TurnChangedEventArgs(turnCount));
             }
             else
             {
@@ -404,7 +467,7 @@ namespace NewADVMaker
         #region Generic Command Methods
         public void info(CommandParameters commandParameters)
         {
-            Character selectedChar = (Character)commandParameters.firstObject;
+            Character selectedChar = (Character)commandParameters.commandObjects[0];
             gameObjects["char1"] = selectedChar;
             string propertyString = "Not Defined";
             string propertyNameString = "";
@@ -456,7 +519,6 @@ namespace NewADVMaker
             }
             
         }
-        
         public void get_commands(CommandParameters commandParameters)
         {
             Type type = typeof(MainGameForm);
@@ -532,13 +594,28 @@ namespace NewADVMaker
                     string[] newStringArray = new string[sourceStringArray.Length - 1];
                     newStringArray[0] = verb;
                     Array.Copy(sourceStringArray, 2, newStringArray, 1, sourceStringArray.Length - 2);
-                    sourceStringArray = newStringArray;
+
+                    if (currentGame.findCommand(newStringArray) != null)
+                    {
+                        sourceStringArray = newStringArray;
+                    }
                 }
             }
 
             return sourceStringArray;
         }
-        
+        private string ObjectError(string objectName)
+        {
+            return string.Format("{0} does not exist", objectName);
+        }
         #endregion
+    }
+    public class TurnChangedEventArgs : EventArgs
+    {
+        public int TurnCount { get; set; }
+        public TurnChangedEventArgs(int TurnCount)
+        {
+            this.TurnCount = TurnCount;
+        }
     }
 }

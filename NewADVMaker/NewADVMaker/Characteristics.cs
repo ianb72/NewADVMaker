@@ -20,6 +20,8 @@ namespace NewADVMaker
 
             return assLUT[bodytype];
         }
+        public static string[] exits = new string[]
+        {"north","south","east","west","up","down","in","out","left","right","back","forwards"};
 
     }
     public enum CupSize
@@ -384,12 +386,5 @@ namespace NewADVMaker
         stairs,
         hall,
         kitchen
-    }
-    public enum Exits
-    {
-        north,
-        south,
-        east,
-        west,
     }
 }

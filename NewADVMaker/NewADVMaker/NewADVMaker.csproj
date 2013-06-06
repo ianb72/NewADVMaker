@@ -54,9 +54,13 @@
     <Compile Include="Characters\Character.cs" />
     <Compile Include="CharacterGenerator.cs" />
     <Compile Include="Characteristics.cs" />
+    <Compile Include="Characters\daughter.cs" />
+    <Compile Include="Characters\shoolgirl.cs" />
     <Compile Include="Characters\mari.cs" />
+    <Compile Include="Characters\mother.cs" />
     <Compile Include="Characters\player.cs" />
     <Compile Include="Characters\stacey.cs" />
+    <Compile Include="Characters\youngboy.cs" />
     <Compile Include="Clothing\Blouse.cs" />
     <Compile Include="Clothing\Bra.cs" />
     <Compile Include="Clothing\ClothingBase.cs" />
@@ -65,11 +69,14 @@
     <Compile Include="Clothing\Panties.cs" />
     <Compile Include="CommandSearchParams.cs" />
     <Compile Include="Commands\AdultCommandList.cs" />
+    <Compile Include="Commands\BabysittingCommandList.cs" />
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\CommandParameters.cs" />
     <Compile Include="Commands\StandardCommandList.cs" />
+    <Compile Include="Commands\TestGameCommandList.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="Games\BabySitting.cs" />
     <Compile Include="Games\GameBase.cs" />
     <Compile Include="Games\TestGame.cs" />
     <Compile Include="MainGameForm.cs">
@@ -86,10 +93,13 @@
     </Compile>
     <Compile Include="GameObject.cs" />
     <Compile Include="Interfaces\IcommandList.cs" />
+    <Compile Include="MessageList.cs" />
     <Compile Include="msgObjects.cs" />
     <Compile Include="msgParams.cs" />
     <Compile Include="Objects\Bed.cs" />
     <Compile Include="Objects\Dildo.cs" />
+    <Compile Include="Objects\Door.cs" />
+    <Compile Include="Objects\Key.cs" />
     <Compile Include="Objects\Strapon.cs" />
     <Compile Include="Outfits\girlsSchoolUniform.cs" />
     <Compile Include="Outfits\OutfitBase.cs" />
@@ -98,8 +108,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rooms\LivingRoom.cs" />
     <Compile Include="Rooms\Kitchen.cs" />
-    <Compile Include="Rooms\MasterBedroom.cs" />
+    <Compile Include="Rooms\Bedroom.cs" />
     <Compile Include="Rooms\RoomBase.cs" />
+    <Compile Include="Rooms\RoomExit.cs" />
     <Compile Include="WordReplacement.cs" />
     <EmbeddedResource Include="MainGameForm.resx">
       <DependentUpon>MainGameForm.cs</DependentUpon>
@@ -115,7 +126,14 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="MessageLists\BS.msgLst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MessageLists\TestGame.msglst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

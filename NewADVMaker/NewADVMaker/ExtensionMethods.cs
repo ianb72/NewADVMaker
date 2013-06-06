@@ -25,6 +25,7 @@ namespace ExtensionMethods
             adverbs.Add("with");
             adverbs.Add("the");
             adverbs.Add("and");
+            adverbs.Add("on");
             return adverbs.Contains(stringToCheck);
         }
     }

@@ -5,12 +5,12 @@ using System.Text;
 
 namespace NewADVMaker.Rooms
 {
-    public class MasterBedroom : RoomBase
+    public class Bedroom : RoomBase
     {
-        public MasterBedroom()
+        public Bedroom()
         {
             this.Description = "Your bedroom";
-            this.ObjectName = "master bedroom";
+            this.ObjectName = "bedroom";
         }
     }
 }

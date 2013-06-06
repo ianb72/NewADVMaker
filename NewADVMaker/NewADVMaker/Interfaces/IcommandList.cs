@@ -10,5 +10,6 @@ namespace NewADVMaker.Interfaces
     {
         MainGameForm.MessageHandler messageHandler { get; set; }
         void msg(Commands.CommandParameters commandParameters, msgParams messageParams);
+        Games.GameBase currentGame { get; set; }
     }
 }

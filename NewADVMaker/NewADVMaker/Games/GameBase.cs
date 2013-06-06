@@ -16,19 +16,35 @@ namespace NewADVMaker.Games
 {
     public class GameBase
     {
-        
+        public string GameTitle { get; set; }
         public List<Character> gameCharacters = new List<Character>();
         public List<IcommandList> commandLists = new List<IcommandList>();
         public Dictionary<string, GameObject> gameObjects = new Dictionary<string, GameObject>();
-        public Dictionary<string, GameObject> directions = new Dictionary<string, GameObject>();
         public Character Char1 = new Character();
         public Character Char2 = new Character();
         public Character Char3 = new Character();
         public Character player = new Character(true);
         public RoomBase currentRoom;
         public CharacterGenerator charGenerator = new CharacterGenerator();
+        public MainGameForm mainGameForm { get; set; }
+        public int TurnCount { get; set; }
+        public Dictionary<string, int> customVariable = new Dictionary<string, int>();
+
+        public MainGameForm.MessageHandler messageHandler;
 
         public GameBase()
+        {
+        }
+        
+        public GameBase(MainGameForm.MessageHandler messageHandler,MainGameForm mainGameForm)
+        {
+            this.player = new Characters.player();
+            this.messageHandler = messageHandler;
+            this.mainGameForm = mainGameForm;
+            this.mainGameForm.TurnChangedEvent += mainGameForm_TurnChangedEvent;
+        }
+
+        public virtual void mainGameForm_TurnChangedEvent(TurnChangedEventArgs e)
         {
         }
         public virtual void Init()
@@ -45,7 +61,11 @@ namespace NewADVMaker.Games
                 room.peoplePresent.Add((Character)objectToAdd);
             }
         }
-        public void AddToRoom(RoomBase room, string objectName, GameObject objectToAdd)
+        public void RemoveFromRoom(RoomBase room, GameObject objectToRemove)
+        {
+            room.peoplePresent.Remove((Character)objectToRemove);
+        }
+        public void AddToRoom(RoomBase room, GameObject objectToAdd)
         {
             if (objectToAdd.GetType().BaseType == typeof(Character) || objectToAdd.GetType() == typeof(Character))
             {
@@ -54,16 +74,17 @@ namespace NewADVMaker.Games
             }
             else
             {
-                room.contents.Add(objectName, objectToAdd);
+                room.contents.Add(objectToAdd.ObjectName, objectToAdd);
             }
         }
-        public void AddToRoom(RoomBase room, GameObject objectToAdd)
+        public void AddToRoom(string roomName, string objectName)
         {
-            AddToRoom(room, null, objectToAdd);
+            AddToRoom((RoomBase) gameObjects[roomName], gameObjects[objectName]);
         }
         public void EnterRoom(RoomBase roomToEnter)
         {
             player.currentRoom = roomToEnter;
+            SetCurrentRoom(roomToEnter);
         }
         public void GetRoomOccupants()
         {
@@ -81,9 +102,32 @@ namespace NewADVMaker.Games
             AddToRoom(currentRoom, (Character)newRandomCharacter);
             gameObjects["char1"] = newRandomCharacter;
         }
-
-        public GameObject findObject(GameObject gameObject, string objectName, Character Character1, Character Character2)
+        public void AddToGame(string label, GameObject objectToAdd)
         {
+            gameObjects.Add(label, (GameObject)objectToAdd);
+            if (objectToAdd.GetType().BaseType == typeof(Character))
+            {
+                gameCharacters.Add((Character)objectToAdd);
+            }
+
+        }
+        public void AddToGame(GameObject objectToAdd)
+        {
+            AddToGame(objectToAdd.ObjectName, objectToAdd);
+        }
+        public void SetCurrentRoom(RoomBase room)
+        {
+            gameObjects["currentRoom"] = room;
+            currentRoom = room;
+        }
+        public GameObject findObject(GameObject gameObject, string objectName, Character Character1, GameObject object2)
+        {
+            Character Character2 = null;
+
+            if (object2!=null &&  object2.GetType().BaseType == typeof(Character))
+            {
+                Character2 = (Character)object2;
+            }
             //Is object character
             if (gameObject == null)
             {
@@ -134,7 +178,11 @@ namespace NewADVMaker.Games
             {
                 gameObject = findInventoryObject(Character1, objectName);
             }
+            //Is Room
+            if (gameObject == null)
+            {
 
+            }
             return gameObject;
         }
         public GameObject findObject(GameObject gameObject, string objectName)
@@ -232,9 +280,9 @@ namespace NewADVMaker.Games
         {
             foreach (KeyValuePair<string, GameObject> kvp in currentRoom.contents)
             {
-                if (kvp.Key == objectName)
+                if(kvp.Value.alternateNames.Any(p => p.Contains(objectName)))
                 {
-                    return kvp.Value;
+                    return (kvp.Value);
                 }
             }
 
@@ -284,8 +332,14 @@ namespace NewADVMaker.Games
         }
         public GameObject isDirectionalCommand(string wordToCheck)
         {
-            GameObject tempObject;
-            directions.TryGetValue(wordToCheck, out tempObject);
+            GameObject tempObject = null;
+            
+            if (Characteristics.exits.Contains(wordToCheck))
+            {
+                tempObject = new GameObject();
+                tempObject.ObjectName = wordToCheck;
+                
+            }
             return tempObject;
         }
         public CommandSearchParams findCommand(string[] sourceStringArray)
@@ -297,9 +351,22 @@ namespace NewADVMaker.Games
                 {
                     Type type = commandList.GetType();
                     MethodInfo[] methods = type.GetMethods();
-                    if (methods.Any(p => p.Name == str))
+
+                    //Replace restricted system methods
+                    string searchString = "";
+                    if (str == "lock")
                     {
-                        return new CommandSearchParams(commandList, stringIndex,str);
+                        searchString = "lockCMD";
+                    }
+                    else
+                    {
+                        searchString = str;
+                    }
+
+                    if (methods.Any(p => p.Name == searchString))
+                    {
+                        Console.WriteLine("Command {0} found in {1}", searchString, commandList);
+                        return new CommandSearchParams(commandList, stringIndex,searchString);
                     }
                     stringIndex++;
                  }
@@ -309,7 +376,48 @@ namespace NewADVMaker.Games
         }
         public void msg(CommandParameters commandParameters, msgParams msgParameters)
         {
+            msgParameters.commandParameters = commandParameters;
+            messageHandler.Invoke(msgParameters);
+        }
+        public void msg(msgParams msgParameters)
+        {
+            messageHandler.Invoke(msgParameters);
+        }
+        public Door findDoorFromDirection(Door door, RoomBase room, string exitString)
+        {
+            foreach(KeyValuePair<RoomExit,RoomBase> kvp in room.exits)
+            {
+                if (kvp.Key.direction == exitString)
+                {
+                    return kvp.Key.door;
+                }
+            }
 
+            return door;
+        }
+        public Door findDoorFromDestination(Door door, RoomBase room, string exitString)
+        {
+            foreach (KeyValuePair<RoomExit, RoomBase> kvp in room.exits)
+            {
+                if (kvp.Value.ObjectName == exitString) { return kvp.Key.door; }
+
+            }
+
+            return door;
+        }
+        public Door findDoor(Door door, RoomBase room, string exitString)
+        {
+            if (door == null)
+            {
+                door = findDoorFromDirection(door, room, exitString);
+            }
+
+            if (door == null)
+            {
+                door = findDoorFromDestination(door, room, exitString);
+            }
+
+            return door;
         }
     }
 }

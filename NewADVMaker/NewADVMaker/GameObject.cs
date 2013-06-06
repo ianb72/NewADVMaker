@@ -7,10 +7,16 @@ namespace NewADVMaker
 {
     public class GameObject
     {
+        private string _objectName;
+
         public string Description { get; set; }
         public bool isPlayerCharacter { get; set; }
         public bool isRoom { get; set; }
-        public string ObjectName { get; set; }
+        public string ObjectName
+        {
+            get { return _objectName; }
+            set { _objectName = value; alternateNames.Add(value); }
+        }
         public string DisplayName { get; set; }
         public Rooms.RoomBase currentRoom { get; set; }
         public bool isWearable { get; set; }
@@ -22,6 +28,7 @@ namespace NewADVMaker
         public ObjectType objectType { get; set; }
         public List<string> alternateNames { get; set; }
         public Dictionary<string, object> customVariable { get; set; }
+        public bool isOpen { get; set; }
 
         public GameObject()
         {
@@ -32,11 +39,11 @@ namespace NewADVMaker
 
         public GameObject(string description)
         {
+            this.alternateNames = new List<string>();
+            this.customVariable = new Dictionary<string, object>();
             this.Description = description;
             this.ObjectName = description;
             this.objectType = ObjectType.Generic;
-            this.alternateNames = new List<string>();
-            this.customVariable = new Dictionary<string, object>();
         }
 
         public virtual void Wear(Character targetCharacter)

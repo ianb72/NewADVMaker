@@ -7,9 +7,9 @@ namespace NewADVMaker.Commands
 {
     public class CommandParameters
     {
-        public GameObject firstObject { get; set; }
-        public GameObject secondObject { get; set; }
-        public GameObject thirdObject { get; set; }
+        public GameObject[] commandObjects { get; set; }
+        public Dictionary<string, GameObject> gameObjects;
+        public Games.GameBase currentGame { get; set; }
 
         public Rooms.RoomBase currentRoom { get; set; }
 
@@ -22,20 +22,9 @@ namespace NewADVMaker.Commands
         public CommandParameters()
         {
         }
-        public CommandParameters(GameObject firstObject,GameObject secondObject,GameObject thirdObject)
+        public CommandParameters(GameObject[] commandObjects)
         {
-            this.firstObject = firstObject;
-            this.secondObject = secondObject;
-            this.thirdObject = thirdObject;
-        }
-        public CommandParameters(GameObject firstObject, GameObject secondObject)
-        {
-            this.firstObject = firstObject;
-            this.secondObject = secondObject;
-        }
-        public CommandParameters(GameObject firstObject)
-        {
-            this.firstObject = firstObject;
+            this.commandObjects = commandObjects;
         }
         public CommandParameters(string stringParam)
         {
